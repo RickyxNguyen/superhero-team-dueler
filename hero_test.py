@@ -157,7 +157,7 @@ def test_hero_weapon_attack_mean_value():
     min_attack = strength // 2
     big_strength = superheroes.Weapon("Sword of Whimsy", strength)
     kkrunch.add_ability(big_strength)
-    calculated_mean = (strength - min_attack) // 2 +min_attack
+    calculated_mean = (strength - min_attack)//2 + min_attack
     accepted_window = 400
     iterations = 6000
 
@@ -166,7 +166,8 @@ def test_hero_weapon_attack_mean_value():
 
     for _ in range(iterations): 
         attack_value = kkrunch.attack()
-        assert attack_value >= min_attack and attack_value <= strength
+        print(attack_value)
+        assert min_attack <= attack_value <= strength
         total_attack += attack_value
         deviation = attack_value - calculated_mean
         sum_of_sqr += deviation * deviation
