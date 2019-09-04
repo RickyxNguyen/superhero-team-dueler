@@ -22,22 +22,22 @@ class Ability:
 
 
 class Armor:
-    def __init__(self, name, max_block):
+    def __init__(self, name, defense):
         '''Instantiate instance properties.
             name: String
-            max_block: Integer
+            block: Integer
         '''
         self.name = name
-        self.block = max_block
+        self.block = defense
 
         # TODO: Create instance variables for the values passed in.
-    def block(self):
+    def defense(self):
         ''' Return a value between 0 and the value set by self.max_damage.'''
         # TODO: Use random.randint(a, b) to select a random attack value.
         # Return an attack value between 0 and the full attack.
         # Hint: The constructor initializes the maximum attack value.
-        blocks = random.randint(0, self.block)
-        return blocks
+        defend = random.randint(0, self.block)
+        return defend
 
 
 class Weapon(Ability):
@@ -101,14 +101,14 @@ class Hero:
         # This data must be output to the console.
         # Hint: Use the information stored in each hero.
         pass
-    def defend(self, damage_amt):
+    def defend(self):
         '''Runs `block` method on each armor.
             Returns sum of all blocks
         '''
         # TODO: This method should run the block method on each armor in self.armors
         total_defense = 0
         for hero in self.armors:
-            total_defense += Ability.block(hero)
+            total_defense += Armor.defense(hero)
         return total_defense
 
     def take_damage(self, damage):
