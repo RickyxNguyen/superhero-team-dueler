@@ -1,4 +1,5 @@
 import random
+import system
 
 
 class Ability:
@@ -101,6 +102,7 @@ class Hero:
         # This data must be output to the console.
         # Hint: Use the information stored in each hero.
         pass
+
     def defend(self):
         '''Runs `block` method on each armor.
             Returns sum of all blocks
@@ -128,11 +130,19 @@ class Hero:
             print('{} died'.format(self.name))
             return False
 
+    def add_armor(self, armor):
+        '''Add Armor to self.armors
+            armor: Armor Object
+        '''
+        # TODO: This method will add the armor object that is passed in to
+        # the list of armor objects defined in the constructor: `self.armors`.
+        self.armors.append(armor)
+
     def fight(self, opponent):
         ''' Current Hero will take turns fighting the opponent hero passed in.
         '''
 
-        #TODO: Refactor this method to update the
+        # TODO: Refactor this method to update the
         # number of kills the hero has when the opponent dies.
         # Also update the number of deaths for whoever dies in the fight
         print(f'{self.name} will be fighting {opponent.name}')
@@ -141,12 +151,12 @@ class Hero:
             opponent.take_damage(self.attack())
             if opponent.is_alive() == False:
                 print(f'{self.name} won!')
-                self.kills +=1
-                opponent.deaths +=1
+                self.kills += 1
+                opponent.deaths += 1
             elif self.is_alive() == False:
                 print(f'{opponent.name} won!')
-                opponent.kills +=1
-                self.deaths +=1
+                opponent.kills += 1
+                self.deaths += 1
             elif len(self.abilities) == 0 and len(opponent.abilities) == 0:
                 print(f"It's a tie")
 
@@ -161,14 +171,13 @@ class Hero:
         self.deaths += num_deaths
 
 
-
 class Team:
     def __init__(self, name):
         ''' Initialize your team with its team name
         '''
         # TODO: Implement this constructor by assigning the name and heroes, which should be an empty list
-        self.name=name
-        self.heroes=[]
+        self.name = name
+        self.heroes = []
 
     def remove_hero(self, name):
         '''Remove hero from heroes list.
@@ -182,15 +191,24 @@ class Team:
         return 0
 
     def view_all_heroes(self):
-            '''Prints out all heroes to the console.'''
-            # TODO: Loop over the list of heroes and print their names to the terminal.
-            for hero in self.heroes:
-                print(hero.name)
+        '''Prints out all heroes to the console.'''
+        # TODO: Loop over the list of heroes and print their names to the terminal.
+        for hero in self.heroes:
+            print(hero.name)
+
     def add_hero(self, hero):
-            '''Add Hero object to self.heroes.'''
-            # TODO: Add the Hero object that is passed in to the list of heroes in
-            # self.heroes
-            self.heroes.append(hero)
+        '''Add Hero object to self.heroes.'''
+        # TODO: Add the Hero object that is passed in to the list of heroes in
+        # self.heroes
+        self.heroes.append(hero)
+
+    def add_weapon(self, weapon):
+        '''Add weapon to self.abilities'''
+        # TODO: This method will append the weapon object passed in as an
+        # argument to self.abilities.
+        # This means that self.abilities will be a list of
+        # abilities and weapons.
+        self.abilities.append(weapon)
 
     def attack(self, other_team):
         ''' Battle each team against each other.'''
@@ -202,7 +220,7 @@ class Team:
         while len(self.alive_heroes()) > 0 and len(other_team.alive_heroes()) > 0:
             hero_1 = random.choice(self.alive_heroes())
             hero_2 = random.choice(other_team.alive_heroes())
-            ##make the randomly selected alive heroes fight
+            # make the randomly selected alive heroes fight
             hero_1.fight(hero_2)
 
     def alive_heroes(self):
@@ -218,7 +236,7 @@ class Team:
         # TODO: This method should reset all heroes health to their
         # original starting value.
         for hero in self.heroes:
-            hero.current_health=100
+            hero.current_health = 100
 
     def stats(self):
         '''Print team statistics'''
@@ -228,19 +246,109 @@ class Team:
         # Hint: Use the information stored in each hero.
         for hero in self.heroes:
             print(hero.kills // hero.health)
-            
-# if __name__ == "__main__":
-#     # If you run this file from the terminal
-#     # this block is executed.
 
-#     hero1 = Hero("Wonder Woman")
-#     hero2 = Hero("Dumbledore")
-#     ability1 = Ability("Super Speed", 300)
-#     ability2 = Ability("Super Eyes", 130)
-#     ability3 = Ability("Wizard Wand", 80)
-#     ability4 = Ability("Wizard Beard", 20)
-#     hero1.add_ability(ability1)
-#     hero1.add_ability(ability2)
-#     hero2.add_ability(ability3)
-#     hero2.add_ability(ability4)
-#     hero1.fight(hero2)
+
+class Arena:
+    def __init__(self):
+        '''Instantiate properties
+            team_one: None
+            team_two: None
+        '''
+        # TODO: create instance variables named team_one and team_two that
+        # will hold our teams.
+        self.team_one
+        self.team_two
+
+    def create_ability(self):
+        '''Prompt for Ability information.
+            return Ability with values from user Input
+        '''
+        # TODO: This method will allow a user to create an ability.
+        # Prompt the user for the necessary information to create a new ability object.
+        # return the new ability object.
+        ability_name = input("What's the name of your abiity? ")
+        ability_power = input("What's the strength of your abiity? ")
+        ability = Ability(ability_name, ability_power)
+        return ability
+
+    def create_weapon(self):
+        '''Prompt user for Weapon information
+            return Weapon with values from user input.
+        '''
+        # TODO: This method will allow a user to create a weapon.
+        # Prompt the user for the necessary information to create a new weapon object.
+        # return the new weapon object.
+        weapon_name = input("What's the name of your weapon? ")
+        weapon_power = input("What's the strength of your weapon? ")
+        weapon = Weapon(weapon_name, weapon_power)
+        return weapon
+
+    def create_armor(self):
+        '''Prompt user for Armor information
+          return Armor with values from user input.
+        '''
+        # TODO:This method will allow a user to create a piece of armor.
+        #  Prompt the user for the necessary information to create a new armor
+        #  object.
+        #
+        #  return the new armor object with values set by user.
+        armor_name = input("What's the name of your armor? ")
+        armor_defense = input("What's the durability of your armor? ")
+        armor = Armor(armor_name, armor_defense)
+        return armor
+
+    def create_hero(self):
+        '''Prompt user for Hero information
+          return Hero with values from user input.
+        '''
+        # TODO: This method should allow a user to create a hero.
+        # User should be able to specify if they want armors, weapons, and
+        # abilities.
+        # Call the methods you made above and use the return values to build
+        # your hero.
+        #
+        # return the new hero object
+        hero_name = input("What's the name of your hero? ")
+        running = True
+        while running:
+            selection = input(
+                "Press A to add to armor, W to add from weapons or B to add abilities: ")
+            selection_both_cases = selection.lower()
+            running = select(selection_both_cases)
+
+        def select(input):
+
+            # Create item
+            if input == "a":
+                create_armor()
+
+            # Read item
+            elif input == "w":
+                create_weapon()
+
+            # Print all items
+            elif input == "b":
+                create_ability()
+
+            # Catch all
+            else:
+                print("Unknown Option")
+            return True
+
+    def build_team_one(self):
+        '''Prompt the user to build team_one '''
+        # TODO: This method should allow a user to create team one.
+        # Prompt the user for the number of Heroes on team one
+        # call self.create_hero() for every hero that the user wants to add to team one.
+        #
+        # Add the created hero to team one.
+        
+
+    def build_team_two(self):
+        '''Prompt the user to build team_two'''
+        # TODO: This method should allow a user to create team two.
+        # Prompt the user for the number of Heroes on team two
+        # call self.create_hero() for every hero that the user wants to add to team two.
+        #
+        # Add the created hero to team two.
+        pass
