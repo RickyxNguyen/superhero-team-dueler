@@ -1,1 +1,1 @@
-#This is an app that demonsrates the use of constructors
+#This is an app that demonsrates the use of constructors and most aspects of OOP
