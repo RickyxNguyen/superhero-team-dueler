@@ -140,7 +140,7 @@ class Hero:
         if self.current_health > 0:
             return True
         else:
-            print('{} is now dead'.format(self.name))
+            print('{} is dead'.format(self.name))
             return False
 
     def fight(self, opponent):
@@ -246,8 +246,8 @@ class Team:
         # member of the team to the screen.
         # This data must be output to the console.
         # Hint: Use the information stored in each hero.
-        for hero in self.heroes:
-            hero.show_stats()
+        for i in self.heroes:
+            i.hero_stats()
 
 
 class Arena:
@@ -326,7 +326,7 @@ class Arena:
         while self.team_one.alive_heroes() and self.team_two.alive_heroes():
             self.team_one.attack(self.team_two)
             self.team_two.attack(self.team_one)
-            if self.team_one.alive_heroes(self):
+            if self.team_one.alive_heroes():
                 print('{} won this battle.'.format(self.team_one.name))
                 self.team_one.update_kills(len(self.team_two.heroes))
                 return False
