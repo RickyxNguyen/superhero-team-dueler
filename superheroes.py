@@ -266,14 +266,14 @@ class Arena:
         new_team = Team(name)
         keep_adding_heroes = True
         while keep_adding_heroes:
-            print('Adding a hero to {}...'.format(name))
+            print(f'Adding a hero to {name}...')
             new_hero = Hero(input('Enter the name of the hero: '))
             new_hero.abilities = self.hero_additions('ability', new_hero.name)
             new_hero.abilities = self.hero_additions('weapon', new_hero.name)
             new_hero.armors = self.hero_additions('armor', new_hero.name)
             new_team.add_hero(new_hero)
             keep_adding_heroes = self.yes_or_no(
-                'Would you like to keep adding heroes to {}? Answer ( y/n ): '.format(name))
+                f'Would you like to keep adding heroes to {name}? Answer ( y/n ): ')
         return new_team
 
     def yes_or_no(self, message):
@@ -290,17 +290,17 @@ class Arena:
     def hero_additions(self, addition_type, hero_name):
         '''Method that allows users to make additions to heros while building out the team (using Arena methods) '''
         additions = []
-        if self.yes_or_no('do you want to add {} to {}? ( y/n ): '.format(addition_type, hero_name)):
+        if self.yes_or_no(f'Do you want to add {addition_type} to {hero_name}? ( y/n ): '):
             keep_asking = True
             addition = Ability if addition_type == 'ability' else Weapon if addition_type == 'weapon' else Armor
             while keep_asking:
-                name = input('What is this {} called? '.format(addition_type))
+                name = input(f'What is this {addition_type} called? ')
                 block_or_attack = 'block' if addition_type == Armor else 'attack'
                 strength = int(
-                    input("What is {}'s  {} strength? ".format(name, block_or_attack)))
+                    input(f"What is {name}'s  {block_or_attack} strength? "))
                 additions.append(addition(name, strength))
                 keep_asking = self.yes_or_no(
-                    'Do you want to add another {}? ( y/n ): '.format(addition_type))
+                    f'Do you want to add another {addition_type}? ( y/n ): ')
             return additions
 
     def build_team_one(self):
@@ -327,11 +327,11 @@ class Arena:
             self.team_one.attack(self.team_two)
             self.team_two.attack(self.team_one)
             if self.team_one.alive_heroes():
-                print('{} won this battle.'.format(self.team_one.name))
+                print(f'{self.build_team_one.name} won this battle.')
                 self.team_one.update_kills(len(self.team_two.heroes))
                 return False
             else:
-                print('{} won this battle.'.format(self.team_two.name))
+                print(f'{self.build_team_two.name} won this battle.')
                 self.team_two.update_kills(len(self.team_one.heroes))
                 return False
 
