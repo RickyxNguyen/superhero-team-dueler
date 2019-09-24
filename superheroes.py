@@ -18,8 +18,7 @@ class Ability:
         # TODO: Use random.randint(a, b) to select a random attack value.
         # Return an attack value between 0 and the full attack.
         # Hint: The constructor initializes the maximum attack value.
-        strength = random.randint(0, self.strength)
-        return strength
+        return random.randint(0, self.strength)
 
     def update_attack(self, new_dmg):
         '''Allows user to update attack damage of ability '''
@@ -41,8 +40,7 @@ class Armor:
         # TODO: Use random.randint(a, b) to select a random attack value.
         # Return an attack value between 0 and the full attack.
         # Hint: The constructor initializes the maximum attack value.
-        defend = random.randint(0, self.block)
-        return defend
+        return random.randint(0, self.block)
 
 
 class Weapon(Ability):
@@ -51,8 +49,7 @@ class Weapon(Ability):
         between one half to the full attack power of the weapon.
         '''
         # TODO: Use what you learned to complete this method.
-        strength = random.randint(self.strength//2, self.strength)
-        return strength
+        return random.randint(self.strength//2, self.strength)
 
 
 class Hero:
