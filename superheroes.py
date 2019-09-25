@@ -62,7 +62,6 @@ class Hero:
         self.deaths = 0
         self.kills = 0
 
-
     def add_ability(self, ability):
         ''' Add ability to abilities list '''
         self.abilities.append(ability)
@@ -221,82 +220,124 @@ class Arena:
     '''Loops until user creates two teams and prompts 
     for ability, weapon, and/or armor for each hero'''
 
-    def build_team(self):
-        name = input('Enter a team name: ')
-        new_team = Team(name)
-        keep_adding_heroes = True
-        while keep_adding_heroes:
-            print(f'Adding a hero to {name}...')
-            new_hero = Hero(input('Enter the name of the hero: '))
-            new_hero.abilities = self.hero_additions('ability', new_hero.name)
-            new_hero.abilities = self.hero_additions('weapon', new_hero.name)
-            new_hero.armors = self.hero_additions('armor', new_hero.name)
-            new_team.add_hero(new_hero)
-            keep_adding_heroes = self.yes_or_no(
-                f'Would you like to keep adding heroes to {name}? Answer ( y/n ): ')
-        return new_team
-
-
-    def yes_or_no(self, message):
-        '''Method that returns false and will end a loop when user input n, will return True if user inputs y '''
-        while True:
-            response = input(message)
-            if response.isalpha():
-                if response.lower() == 'y':
-                    return True
-                elif response.lower() == 'n':
-                    return False
-                else:
-                    print('Not a choice')
-                return self.yes_or_no(message)
-            else:
-                print( "Not a letter!" )
-                continue
-
-
-
-
-    def hero_additions(self, addition_type, hero_name):
-        '''Method that allows users to make additions to heros while building out the team (using Arena methods) '''
-        additions = []
-        if self.yes_or_no(f'Do you want to add {addition_type} to {hero_name}? ( y/n ): '):
-            keep_asking = True
-            addition = Ability if addition_type == 'ability' else Weapon if addition_type == 'weapon' else Armor
-            while keep_asking:
-                name = input(f'What is this {addition_type} called? ')
-                block_or_attack = 'block' if addition_type == Armor else 'attack'
-                strength = int(
-                    input(f"What is {name}'s  {block_or_attack} strength? "))
-                additions.append(addition(name, strength))
-                keep_asking = self.yes_or_no(
-                    f'Do you want to add another {addition_type}? ( y/n ): ')
-            return additions
 
     def build_team_one(self):
+        '''Prompt the user to build team_one'''
+        team_name = input("What will be the name of Team One? ")
+        team = Team(team_name)
+        print("Lets start adding heroes to {}!".format(team_name))
 
-        self.team_one = self.build_team()
-        return self.team_one
+        building_team = True
+        while building_team:
+
+            hero_name = input("Hero's name: ")
+            new_hero = Hero(hero_name)
+            print("What abilities/weapons do you want {} to have?".format(new_hero.name))
+            #while loop to enter in as many abilities as wanted
+            building_abilities = True
+            while building_abilities:
+                ability_name = input("Name of ability: ")
+                ability_attack_strength = input("What attack strength should {} have? ".format(ability_name))
+                new_ability = Ability(ability_name, ability_attack_strength)
+                new_hero.add_ability(new_ability)
+                abilities_finished = input("Add more abilities for {}? Enter (Y/N): ".format(new_hero.name))
+                if abilities_finished == "y" or "Y" or "Yes":
+                    building_abilities = False
+                else:
+                    continue
+            print("Now let's give {} some armor".format(new_hero.name))
+
+            building_armor = True
+            while building_armor:
+                armor_name = input("Name of armor: ")
+                armor_defense = input("Defense score: ")
+                new_armor = Armor(armor_name, armor_defense)
+                new_hero.add_armor(new_armor)
+                building_armor_finished = input("Add more armor for {}? Enter (Y/N): ".format(new_hero.name))
+                if building_armor_finished == "n" or "N" or "No":
+                    building_armor = False
+                else:
+                    team.add_hero(new_hero)
+
+
+            building_team_finished = input("Are you done building {}? Enter (Y/N): ".format(team.name))
+            if building_team_finished == "y" or "Y" or "Yes":
+                building_team = False
+
+        return team
 
     def build_team_two(self):
         '''Prompt the user to build team_two'''
+        team_name = input("What will be the name of Team Two? ")
+        team = Team(team_name)
+        print("Lets start adding heroes to {}!".format(team_name))
 
-        self.team_two = self.build_team()
-        return self.team_two
+        building_team = True
+        while building_team:
+
+            hero_name = input("Hero's name: ")
+            new_hero = Hero(hero_name)
+            print("What abilities/weapons do you want {} to have? ".format(new_hero.name))
+            #while loop to enter in as many abilities as wanted
+            building_abilities = True
+            while building_abilities:
+                ability_name = input("Name of ability: ")
+                ability_attack_strength = int(input("What attack strength should {} have? ".format(ability_name)))
+                new_ability = Ability(ability_name, ability_attack_strength)
+                new_hero.add_ability(new_ability)
+                abilities_finished = input("Add more abilities for {}? Enter (Y/N): ".format(new_hero.name))
+                if abilities_finished == "y" or "Y" or "Yes":
+                    building_abilities = False
+                else:
+                    continue
+            print("Now let's give {} some armor".format(new_hero.name))
+
+            building_armor = True
+            while building_armor:
+                armor_name = input("Name of armor: ")
+                armor_defense = int(input("Defense score: "))
+                new_armor = Armor(armor_name, armor_defense)
+                new_hero.add_armor(new_armor)
+                building_armor_finished = input("Add more armor for {}? Enter (Y/N): ".format(new_hero.name))
+                if building_armor_finished == "y" or "Y" or "Yes":
+                    building_armor = False
+                else:
+                    team.add_hero(new_hero)
+
+
+            building_team_finished = input("Are you done building {}? Enter (Y/N): ".format(team.name))
+            if building_team_finished == "y" or "Y" or "Yes":
+                building_team = False
+
+        return team
 
     def team_battle(self):
         '''Battle team_one and team_two together.'''
 
-        while self.team_one.alive_heroes() and self.team_two.alive_heroes():
+        battling = True
+        while battling == True:
             self.team_one.attack(self.team_two)
             self.team_two.attack(self.team_one)
-            if self.team_one.alive_heroes():
-                print(f'{self.build_team_one.name} won this battle.')
-                self.team_one.update_kills(len(self.team_two.heroes))
-                return False
+
+            winning_team = ""
+
+
+            if self.is_team_dead(self.team_one) == True:
+                winning_team = self.team_two.name
+                print("Congrats to {} for killing all of their opponents!".format(winning_team))
+                batting = False
+                self.show_stats()
+                break
+            elif self.is_team_dead(self.team_two) == True:
+                winning_team = self.team_one.name
+                print("Congrats to {} for killing all of their opponents!".format(winning_team))
+                battling = False
+                self.show_stats()
+                break
             else:
-                print(f'{self.build_team_two.name} won this battle.')
-                self.team_two.update_kills(len(self.team_one.heroes))
-                return False
+                continue
+
+
 
     def show_stats(self):
         '''Prints team statistics to terminal.'''
