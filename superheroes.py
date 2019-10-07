@@ -17,7 +17,6 @@ class Ability:
         return strength
 
 
-
 class Armor:
     def __init__(self, name, defense):
         '''Instantiate instance properties.
@@ -59,7 +58,7 @@ class Hero:
         self.current_health = health
         self.deaths = 0
         self.kills = 0
-        self.status="alive"
+        self.status = "Alive"
         # TODO: Initialize instance variables values as instance variables
         # (Some of these values are passed in above,
         # others will need to be set at a starting value)
@@ -83,10 +82,12 @@ class Hero:
         '''Calculate the total damage from all ability attacks.
             return: total:Int
         '''
-        total_damage = 0
-        for i in self.abilities:
-            total_damage += i.attack()
-        return total_damage
+        total_attack = 0
+        
+        for ability in self.abilities:
+            total_attack += ability.attack()
+
+        return total_attack
 
     def hero_stats(self):
         '''Print team statistics'''
@@ -102,10 +103,11 @@ class Hero:
             Returns sum of all blocks
         '''
         # TODO: This method should run the block method on each armor in self.armors
-        total_defense = 0
-        for hero in self.armors:
-            total_defense += hero.block()
-        return total_defense
+        total_blocked = 0
+
+        for armor in self.armors:
+            total_blocked += armor.defense()
+        return total_blocked
 
     def take_damage(self, damage):
         '''Updates self.current_health to reflect the damage minus the defense.
@@ -125,35 +127,34 @@ class Hero:
     def fight(self, opponent):
         ''' Current Hero will take turns fighting the opponent hero passed in.
         '''
-
         fighting = True
         while fighting == True:
             if self.abilities == None:
                 return "Draw"
                 fighting = False
             
-            hero_attack = self.attack()
-            opponent_attack = opponent.attack()
+            hero1_attack = self.attack()
+            hero2_attack = opponent.attack()
 
             hero1_defense = self.defend()
             hero2_defense = opponent.defend()
 
-            self.take_damage(opponent_attack)
-            opponent.take_damage(opponent_attack)
+            self.take_damage(hero2_attack)
+            opponent.take_damage(hero1_attack)
 
             if self.is_alive() == False:
                 opponent.add_kill(1)
                 self.add_deaths(1)
-                self.status = "dead"
-                opponent.status = "alive"
-                print("{} won!".format(opponent.name))
+                self.status = "Dead"
+                opponent.status = "Alive"
+                print(opponent.name + " won!")
                 fighting = False
             elif opponent.is_alive() == False:
                 self.add_kill(1)
                 opponent.add_deaths(1)
-                opponent.status = "dead"
-                self.status = "alive"
-                print("{} won!".format(self.name))
+                opponent.status = "Dead"
+                self.status = "Alive"
+                print(self.name + " won!")
                 fighting = False
             else:
                 continue
@@ -185,11 +186,11 @@ class Team:
                 return 1
         return 0
 
+        # return [i if name!=hero.name else 0 for i in self.heroes ]
     def view_all_heroes(self):
         '''Prints out all heroes to the console.'''
         # TODO: Loop over the list of heroes and print their names to the terminal.
-        for hero in self.heroes:
-            print(hero.name)
+        print([i.name for i in self.heroes])
 
     def add_hero(self, hero):
         '''Add Hero object to self.heroes.'''
@@ -204,12 +205,12 @@ class Team:
         alive_opponents = []
 
         for i in self.heroes:
-                if i.status == "alive":
-                    alive_heroes.append(self.heroes.index(i))
-        
+            if i.status == "Alive":
+                alive_heroes.append(self.heroes.index(i))
+
         for x in opponents.heroes:
-                if x.status == "alive":
-                    alive_opponents.append(opponents.heroes.index(x))
+            if x.status == "Alive":
+                alive_opponents.append(opponents.heroes.index(x))
 
         while len(alive_heroes) > 0 and len(alive_opponents) > 0:
             random_hero_1 = self.heroes[random.choice(alive_heroes)]
@@ -218,13 +219,13 @@ class Team:
             random_hero_1.fight(random_hero_2)
 
             for death1 in self.heroes:
-                if death1.status == "dead":
+                if death1.status == "Dead":
                     alive_heroes.pop(self.heroes.index(death1))
-            
+
             for death2 in opponents.heroes:
-                if death2.status == "dead":
+                if death2.status == "Dead":
                     alive_opponents.pop(opponents.heroes.index(death2))
-        
+
         if len(alive_heroes) > 0:
             return self.name
         elif len(alive_opponents) > 0:
@@ -266,7 +267,9 @@ class Team:
 
         for hero in self.heroes:
             print("------------------------------------")
-            print("Hero: {} | Kills: {} : | Deaths: {}".format(hero.name, hero.kills, hero.deaths))
+            print("Hero: {} | Kills: {} : | Deaths: {}".format(
+                hero.name, hero.kills, hero.deaths))
+
 
 class Arena:
     def __init__(self):
@@ -280,31 +283,33 @@ class Arena:
         self.winning_team = None
         self.team_amt = 0
 
-
     """Creates ability"""
+
     def create_ability(self):
         name = input("Enter Ability Name: ")
         strength = int(input("Enter Ability Attack Strength: "))
         ability = Ability(name, strength)
         return ability
-    
+
     """Creates weapon"""
+
     def create_weapon(self):
         name = input("Enter Weapon Name: ")
         strength = int(input("Enter Weapon Attack Strength: "))
         weapon = Weapon(name, strength)
         return weapon
     """Creates armor"""
+
     def create_armor(self):
         name = input("Enter Armor Name: ")
         block_power = int(input("Enter Blocking Strength: "))
         armor = Armor(name, block_power)
         return armor
-    
+
     def create_hero(self):
         name = input("Enter Hero Name: ")
         amt = int(input("Enter Hero HP: "))
-        hero = Hero(name,amt)
+        hero = Hero(name, amt)
 
         ability_creation = True
         while ability_creation:
@@ -321,7 +326,7 @@ class Arena:
             else:
                 print('Not a letter')
                 continue
-        
+
         weapon_creation = True
         while weapon_creation:
             weapon_option = input("Create weapon? (Y/N): ").lower()
@@ -337,7 +342,7 @@ class Arena:
             else:
                 print('Not a letter')
                 continue
-        
+
         armor_creation = True
         while armor_creation:
             armor_option = input("Create armor? (Y/N): ").lower()
@@ -353,10 +358,11 @@ class Arena:
             else:
                 print('Not a letter')
                 continue
-        
+
         return hero
 
     """Functions will loop until user says no to having more heroes"""
+
     def build_team_one(self):
         self.team_amt = int(input("How many heroes for both teams?: "))
         name = input("Team 1 Name: ")
@@ -365,10 +371,11 @@ class Arena:
         for i in range(self.team_amt):
             hero = self.create_hero()
             self.team_one.add_hero(hero)
-        
+
         self.team_one.view_all_heroes()
 
     """Functions will loop until user says no to having more heroes"""
+
     def build_team_two(self):
         name = input("Team 2 Name: ")
         self.team_two = Team(name)
@@ -376,15 +383,15 @@ class Arena:
         for i in range(self.team_amt):
             hero = self.create_hero()
             self.team_two.add_hero(hero)
-        
+
         self.team_two.view_all_heroes()
-            
+
     def team_battle(self):
         self.winning_team = self.team_one.attack(self.team_two)
-    
+
     def show_stats(self):
-        print("The winners are: " + self.winning_team)
-        
+        print("The winner(s) are: " + self.winning_team)
+
         self.team_one.stats()
         self.team_two.stats()
 
